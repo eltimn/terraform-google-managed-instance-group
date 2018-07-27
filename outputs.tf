@@ -71,5 +71,5 @@ output network_ip {
 
 output health_check {
   description = "The healthcheck for the managed instance group"
-  value       = "${element(concat(google_compute_health_check.mig-health-check.*.self_link, list("")), 0)}"
+  value       = "${element(concat(google_compute_health_check.mig-http-hc.*.self_link, google_compute_health_check.mig-https-hc.*.self_link), 0)}"
 }

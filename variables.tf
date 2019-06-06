@@ -65,11 +65,9 @@ variable "startup_script" {
 
 variable "access_config" {
   description = "The access config block for the instances. Set to [] to remove external IP."
-  type        = "list"
+  type        = "map"
 
-  default = [
-    {},
-  ]
+  default = {}
 }
 
 variable "metadata" {

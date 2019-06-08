@@ -77,7 +77,7 @@ resource "google_compute_instance_group_manager" "default" {
 
   version {
     name              = "${var.name}-default"
-    instance_template = "${google_compute_instance_template.default.self_link}"
+    instance_template = "${google_compute_instance_template.default.self_link[0]}"
   }
 
   zone          = "${var.zone}"
@@ -152,7 +152,7 @@ resource "google_compute_region_instance_group_manager" "default" {
 
   version {
     name              = "${var.name}-default"
-    instance_template = "${google_compute_instance_template.default.self_link}"
+    instance_template = "${google_compute_instance_template.default.self_link[0]}"
   }
 
   region = "${var.region}"

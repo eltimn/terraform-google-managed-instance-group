@@ -104,10 +104,7 @@ resource "google_compute_instance_group_manager" "default" {
   }
 
   target_pools = var.target_pools
-
-  // There is no way to unset target_size when autoscaling is true so for now, jsut use the min_replicas value.
-  // Issue: https://github.com/terraform-providers/terraform-provider-google/issues/667
-  target_size = var.autoscaling ? var.min_replicas : var.size
+  target_size  = var.size
 
   named_port {
     name = var.service_port_name
@@ -186,8 +183,7 @@ resource "google_compute_region_instance_group_manager" "default" {
   distribution_policy_zones = [local.distribution_zones[length(var.distribution_policy_zones) == 0 ? "default" : "user"]]
 
   target_pools = var.target_pools
-
-  target_size = var.size
+  target_size  = var.size
 
   auto_healing_policies {
     health_check = var.http_health_check ? element(

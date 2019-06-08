@@ -84,10 +84,7 @@ resource "google_compute_instance_group_manager" "default" {
   wait_for_instances = var.wait_for_instances
   base_instance_name = var.name
 
-  version {
-    name              = "${var.name}-default"
-    instance_template = google_compute_instance_template.default[0].self_link
-  }
+  instance_template = google_compute_instance_template.default[0].self_link
 
   zone = var.zone
   dynamic "update_policy" {
@@ -147,26 +144,9 @@ resource "google_compute_autoscaler" "default" {
     max_replicas    = var.max_replicas
     min_replicas    = var.min_replicas
     cooldown_period = var.cooldown_period
-    dynamic "cpu_utilization" {
-      for_each = [var.autoscaling_cpu]
-      content {
-        target = cpu_utilization.value.target
-      }
-    }
-    dynamic "metric" {
-      for_each = [var.autoscaling_metric]
-      content {
-        name   = metric.value.name
-        target = lookup(metric.value, "target", null)
-        type   = lookup(metric.value, "type", null)
-      }
-    }
-    dynamic "load_balancing_utilization" {
-      for_each = [var.autoscaling_lb]
-      content {
-        target = load_balancing_utilization.value.target
-      }
-    }
+    cpu_utilization = var.autoscaling_cpu
+    metric = var.autoscaling_metric
+    load_balancing_utilization = var.autoscaling_lb
   }
 }
 
@@ -196,10 +176,7 @@ resource "google_compute_region_instance_group_manager" "default" {
 
   base_instance_name = var.name
 
-  version {
-    name              = "${var.name}-default"
-    instance_template = google_compute_instance_template.default[0].self_link
-  }
+  instance_template = google_compute_instance_template.default[0].self_link
 
   region = var.region
 
@@ -267,26 +244,9 @@ resource "google_compute_region_autoscaler" "default" {
     max_replicas    = var.max_replicas
     min_replicas    = var.min_replicas
     cooldown_period = var.cooldown_period
-    dynamic "cpu_utilization" {
-      for_each = [var.autoscaling_cpu]
-      content {
-        target = cpu_utilization.value.target
-      }
-    }
-    dynamic "metric" {
-      for_each = [var.autoscaling_metric]
-      content {
-        name   = metric.value.name
-        target = lookup(metric.value, "target", null)
-        type   = lookup(metric.value, "type", null)
-      }
-    }
-    dynamic "load_balancing_utilization" {
-      for_each = [var.autoscaling_lb]
-      content {
-        target = load_balancing_utilization.value.target
-      }
-    }
+    cpu_utilization = var.autoscaling_cpu
+    metric = var.autoscaling_metric
+    load_balancing_utilization = var.autoscaling_lb
   }
 }
 

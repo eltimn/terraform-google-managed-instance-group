@@ -222,7 +222,7 @@ resource "null_resource" "dummy_dependency" {
   depends_on = [google_compute_instance_group_manager.default]
 
   triggers = {
-    instance_template = element(google_compute_instance_template.default.*.self_link, 0)
+    instance_template = google_compute_instance_template.default[0].self_link
   }
 }
 
@@ -231,7 +231,7 @@ resource "null_resource" "region_dummy_dependency" {
   depends_on = [google_compute_region_instance_group_manager.default]
 
   triggers = {
-    instance_template = element(google_compute_instance_template.default.*.self_link, 0)
+    instance_template = google_compute_instance_template.default[0].self_link
   }
 }
 

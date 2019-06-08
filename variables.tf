@@ -212,45 +212,6 @@ variable "automatic_restart" {
   default     = "true"
 }
 
-/* Autoscaling */
-variable "autoscaling" {
-  description = "Enable autoscaling."
-  default     = false
-}
-
-variable "max_replicas" {
-  description = "Autoscaling, max replicas."
-  default     = 5
-}
-
-variable "min_replicas" {
-  description = "Autoscaling, min replics."
-  default     = 1
-}
-
-variable "cooldown_period" {
-  description = "Autoscaling, cooldown period in seconds."
-  default     = 60
-}
-
-variable "autoscaling_cpu" {
-  description = "Autoscaling, cpu utilization policy block as single element array. https://www.terraform.io/docs/providers/google/r/compute_autoscaler.html#cpu_utilization"
-  type        = list(string)
-  default     = []
-}
-
-variable "autoscaling_metric" {
-  description = "Autoscaling, metric policy block as single element array. https://www.terraform.io/docs/providers/google/r/compute_autoscaler.html#metric"
-  type        = list(string)
-  default     = []
-}
-
-variable "autoscaling_lb" {
-  description = "Autoscaling, load balancing utilization policy block as single element array. https://www.terraform.io/docs/providers/google/r/compute_autoscaler.html#load_balancing_utilization"
-  type        = list(string)
-  default     = []
-}
-
 /* Health checks */
 variable "http_health_check" {
   description = "Enable or disable the http health check for auto healing."

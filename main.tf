@@ -76,7 +76,7 @@ resource "google_compute_instance_template" "default" {
 }
 
 resource "google_compute_instance_group_manager" "default" {
-  provider           = google-beta
+  provider           = "google-beta"
   count              = var.module_enabled && var.zonal ? 1 : 0
   project            = var.project
   name               = var.name
@@ -136,23 +136,6 @@ resource "google_compute_instance_group_manager" "default" {
   }
 }
 
-resource "google_compute_autoscaler" "default" {
-  count   = var.module_enabled && var.autoscaling && var.zonal ? 1 : 0
-  name    = var.name
-  zone    = var.zone
-  project = var.project
-  target  = google_compute_instance_group_manager.default[0].self_link
-
-  autoscaling_policy {
-    max_replicas    = var.max_replicas
-    min_replicas    = var.min_replicas
-    cooldown_period = var.cooldown_period
-    cpu_utilization = var.autoscaling_cpu
-    metric = var.autoscaling_metric
-    load_balancing_utilization = var.autoscaling_lb
-  }
-}
-
 data "google_compute_zones" "available" {
   project = var.project
   region  = var.region
@@ -160,8 +143,8 @@ data "google_compute_zones" "available" {
 
 locals {
   distribution_zones = {
-    default = [data.google_compute_zones.available.names]
-    user    = [var.distribution_policy_zones]
+    default = data.google_compute_zones.available.names
+    user    = var.distribution_policy_zones
   }
 
   dependency_id = element(
@@ -171,6 +154,7 @@ locals {
 }
 
 resource "google_compute_region_instance_group_manager" "default" {
+  provider           = "google-beta"
   count              = var.module_enabled && false == var.zonal ? 1 : 0
   project            = var.project
   name               = var.name
@@ -203,9 +187,7 @@ resource "google_compute_region_instance_group_manager" "default" {
 
   target_pools = var.target_pools
 
-  // There is no way to unset target_size when autoscaling is true so for now, jsut use the min_replicas value.
-  // Issue: https://github.com/terraform-providers/terraform-provider-google/issues/667
-  target_size = var.autoscaling ? var.min_replicas : var.size
+  target_size = var.size
 
   auto_healing_policies {
     health_check = var.http_health_check ? element(
@@ -236,23 +218,6 @@ resource "google_compute_region_instance_group_manager" "default" {
   // Initial instance verification can take 10-15m when a health check is present.
   timeouts {
     create = var.http_health_check ? "15m" : "5m"
-  }
-}
-
-resource "google_compute_region_autoscaler" "default" {
-  count   = var.module_enabled && var.autoscaling && false == var.zonal ? 1 : 0
-  name    = var.name
-  region  = var.region
-  project = var.project
-  target  = google_compute_region_instance_group_manager.default[0].self_link
-
-  autoscaling_policy {
-    max_replicas    = var.max_replicas
-    min_replicas    = var.min_replicas
-    cooldown_period = var.cooldown_period
-    cpu_utilization = var.autoscaling_cpu
-    metric = var.autoscaling_metric
-    load_balancing_utilization = var.autoscaling_lb
   }
 }
 

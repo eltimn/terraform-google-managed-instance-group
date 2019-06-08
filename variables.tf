@@ -103,7 +103,7 @@ variable "wait_for_instances" {
 
 variable "update_policy" {
   description = "The upgrade policy to apply when the instance template changes."
-  type        = list(string)
+  type        = list(map(string))
   default     = []
 }
 

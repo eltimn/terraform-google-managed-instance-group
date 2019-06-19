@@ -24,6 +24,17 @@ output "instance_template" {
   value       = google_compute_instance_template.default.*.self_link
 }
 
+output "instance_group" {
+  description = "Link to the `instance_group` property of the instance group manager resource."
+  value = element(
+    concat(
+      google_compute_instance_group_manager.default.*.instance_group,
+      [""],
+    ),
+    0,
+  )
+}
+
 output "instances" {
   description = "List of instances in the instance group. Note that this can change dynamically depending on the current number of instances in the group and may be empty the first time read."
   value       = data.google_compute_instance_group.zonal.*.instances

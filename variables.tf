@@ -143,10 +143,10 @@ variable "local_cmd_create" {
   default     = ":"
 }
 
-variable "local_cmd_destroy" {
-  description = "Command to run on destroy as local-exec provisioner for the instance group manager."
-  default     = ":"
-}
+# variable "local_cmd_destroy" {
+#   description = "Command to run on destroy as local-exec provisioner for the instance group manager."
+#   default     = ":"
+# }
 
 variable "service_account_email" {
   description = "The email of the service account for the instance template."
